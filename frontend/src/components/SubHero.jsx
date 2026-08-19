@@ -140,7 +140,7 @@ const INITIAL_NOTES = [
 
             // Opacity goes from 0 when it starts entering viewport, to 1 when it fills 75% of viewport
             const startScroll = viewportHeight;
-            const endScroll = viewportHeight * 0.25;
+            const endScroll = viewportHeight * 0.01;
 
             const progress = (startScroll - rect.top) / (startScroll - endScroll);
             const clampedOpacity = Math.max(0, Math.min(1, progress));
@@ -163,24 +163,26 @@ const INITIAL_NOTES = [
             }
         }, 600 + INITIAL_NOTES.length * 50);
     };
+    const scrollScale = 0.2 + opacity * 0.9;
 
     return (
+
         <section
             id="sub-hero"
             className="relative flex items-center justify-center min-h-[calc(100vh)] overflow-hidden bg-white"
-            style={{ opacity: opacity, transition: 'opacity 0.2s ease-out' }}
+            style={{ opacity: opacity, transition: 'opacity 2s ease-out' }}
         >
             <style>{`
                 @keyframes float-bob {
                     0%, 100% {
-                        transform: translateY(0);
+                        transform: translateY(-25);
                     }
                     50% {
-                        transform: translateY(-16px);
+                        transform: translateY(-25px);
                     }
                 }
                 .animate-float-bob {
-                    animation: float-bob 6s ease-in-out infinite;
+                    animation: float-bob 15s ease-in-out infinite;
                 }
                 .animate-float-bob:hover {
                     z-index: 50;
@@ -188,7 +190,7 @@ const INITIAL_NOTES = [
                 .note-hover-wrapper {
                     position: relative;
                     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    opacity: 0.9;
+                    opacity: 0.85;
                     transform: scale(0.6);
                     cursor: pointer;
                 }
@@ -201,6 +203,7 @@ const INITIAL_NOTES = [
             {/* Background Decorative Sticky Notes */}
             <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
                 {notes.map((note, idx) => {
+
                     const noteStyle = isSucking ? {
                         top: note.top,
                         left: note.left,
@@ -211,9 +214,9 @@ const INITIAL_NOTES = [
                     } : {
                         top: note.top,
                         left: note.left,
-                        transform: 'translate(0, 0) scale(1) rotate(0deg)',
+                        transform: `translate(0, 0) scale(${scrollScale}) rotate(0deg)`,
                         opacity: 0.9,
-                        transition: 'transform 2.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 2.2s cubic-bezier(0.25, 1, 0.5, 1)'
+                        transition: 'transform 0.1s ease-out, opacity 2s ease-out'
                     };
 
                     return (
