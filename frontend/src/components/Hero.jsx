@@ -10,7 +10,7 @@ export default function Hero() {
         const targetY = subHero.getBoundingClientRect().top + window.pageYOffset;
         const startY = window.pageYOffset || document.documentElement.scrollTop;
         const difference = targetY - startY;
-        const duration = 1800; // Duration in ms (1.8 seconds) for slow scrolling
+        const duration = 1000; // Duration in ms (1.8 seconds) for slow scrolling
         let startTime = null;
 
         const easeInOutQuad = (t, b, c, d) => {
@@ -38,16 +38,16 @@ export default function Hero() {
             <style>{`
                 @keyframes slow-bounce {
                     0%, 100% {
-                        transform: translateY(0);
+                        transform: translateY(-10px);
                         animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
                     }
                     50% {
-                        transform: translateY(-2px);
+                        transform: translateY(0px);
                         animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
                     }
                 }
                 .animate-slow-bounce {
-                    animation: slow-bounce 1s infinite;
+                    animation: slow-bounce 2s infinite;
                 }  
                 @keyframes spin-slow{
                     from{
@@ -65,17 +65,17 @@ export default function Hero() {
             <div className="top-20 relative mx-auto max-w-5xl text-center flex-1 flex flex-col justify-center items-center">
 
                 {/* Main Heading / Value Prop */}
-                <h1 className="z-9 text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl md:text-6xl">
+                <h1 className="z-9 text-4xl font-extrabold tracking-tight text-[var(--text-color)] sm:text-5xl md:text-6xl">
                     <span className="block mb-1">Your thoughts, organized.</span>
                     <span className="text-indigo-600 block">Searchable at the speed of thought.</span>
                 </h1>
                 {/* Subtitle */}
-                <p className="mx-auto mt-10 max-w-2xl text-base text-zinc-600 sm:text-lg">
+                <p className="mx-auto mt-10 max-w-2xl text-base text-[var(--text-muted)] sm:text-lg">
                     A modern sticky-notes platform
                 </p>
 
                 {/* Logo & Loading Arch Container */}
-                <div className='relative top-20 flex items-center justify-center w-150 h-150 -mt-25 mb-8'>
+                <div className='relative top-15 flex items-center justify-center w-[200px] h-[400px] -mt-25 mb-8'>
                     {/* Rotating paper */}
                     <img
                         src='/stick arch.png'
@@ -92,7 +92,7 @@ export default function Hero() {
                         <img
                             src="/visionate logo.png"
                             alt="visionate logo"
-                            className='relative z-10 h-50 w-auto object-contain'
+                            className='relative h-[200px] w-auto object-contain'
                         />
                     </button>
                 </div>
