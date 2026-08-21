@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pin, Lock, Trash2, Edit3, Tag } from 'lucide-react';
 
+// Color themes metadata for visual mapping, coordinating tags and text contrast
 const THEMES = {
     amber: { bg: '#fef08a', text: 'text-amber-955', tag: 'bg-amber-100 text-amber-900 border-amber-300' },
     indigo: { bg: '#e0e7ff', text: 'text-indigo-950', tag: 'bg-indigo-100 text-indigo-900 border-indigo-300' },
@@ -14,11 +15,30 @@ const THEMES = {
     pink: { bg: '#fbcfe8', text: 'text-pink-950', tag: 'bg-pink-100 text-pink-900 border-pink-300' },
     violet: { bg: '#ddd6fe', text: 'text-violet-950', tag: 'bg-violet-100 text-violet-900 border-violet-300' },
     red: { bg: '#fecaca', text: 'text-red-950', tag: 'bg-red-100 text-red-900 border-red-300' },
-    yellow: { bg: '#fef08a', text: 'text-yellow-950', tag: 'bg-yellow-100 text-yellow-900 border-yellow-300' },
+    yellow: { bg: '#fef08a', text: 'text-yellow-950', tag: 'bg-yellow-100 text-yellow-950 border-yellow-300' },
 };
 
 /**
- * StickyNote Component with Realistic Folded Corner
+ * StickyNote Component
+ * 
+ * A UI sticky note component that models a real-world paper note.
+ * Supports light shadows, dynamic themes, tags, status badges (encryption/pin),
+ * and action controls for workspace dashboards.
+ * 
+ * @param {object} props
+ * @param {string} props.title - Title header of the note.
+ * @param {string} props.content - Text body content of the note.
+ * @param {string} props.color - Theme name corresponding to the color palette object.
+ * @param {string[]} props.tags - List of categories/labels displayed at the footer.
+ * @param {boolean} props.isPinned - Renders a pin icon and affects grid sorting.
+ * @param {boolean} props.isEncrypted - Displays a client-side encryption indicator.
+ * @param {string} props.updatedAt - Date string of the last modification.
+ * @param {'display'|'workspace'} props.mode - Interaction level: 'display' is passive, 'workspace' enables hover actions (edit/delete/encrypt).
+ * @param {function} [props.onEdit] - Edit callback (workspace mode only).
+ * @param {function} [props.onDelete] - Delete callback (workspace mode only).
+ * @param {function} [props.onPin] - Pin status toggler callback (workspace mode only).
+ * @param {function} [props.onToggleEncrypt] - Encryption status toggler callback (workspace mode only).
+ * @param {string} [props.className] - Additional Tailwind classes for layout overrides.
  */
 export default function StickyNote({
     title = 'Draft Note',
@@ -35,7 +55,10 @@ export default function StickyNote({
     onToggleEncrypt,
     className = ''
 }) {
+    // Flag checking if actions (like delete/edit) are available
     const isInteractive = mode === 'workspace';
+
+    // Resolve theme variables. Custom colors are supported if passed as hex codes
     const isPredefined = color in THEMES;
     const theme = isPredefined
         ? THEMES[color]
@@ -47,7 +70,7 @@ export default function StickyNote({
 
     return (
         <div
-            className={`group relative flex flex-col justify-between p-6 shadow-2xl shadow-black/25 hover:shadow-black/35 transition-all duration-300 rounded-none aspect-square ${theme.text} ${isInteractive ? 'hover:-translate-y-2' : ''
+            className={`group relative flex flex-col justify-between p-6 transition-all duration-300 rounded-none aspect-square ${theme.text} ${isInteractive ? 'hover:-translate-y-2' : ''
                 } ${className}`}
             style={{
                 backgroundColor: theme.bg
@@ -55,8 +78,8 @@ export default function StickyNote({
         >
 
             {/* Top Header Bar */}
-            <div className="relative z-10 flex items-start justify-between gap-3">
-                <h3 className="font-extrabold text-2xl tracking-tight line-clamp-2 leading-none text-black font-handwriting">
+            <div className="relative z-10 flex items-start justify-between gap-3 min-h-[2.5rem]">
+                <h3 className="text-2xl tracking-tight line-clamp-2 leading-relaxed text-black font-handwriting">
                     {title}
                 </h3>
 
@@ -64,7 +87,7 @@ export default function StickyNote({
                 <div className="flex items-center gap-1.5 shrink-0">
                     {isEncrypted && (
                         <span
-                            className="inline-flex items-center gap-1 bg-white/80 px-2 py-0.5 text-[11px] font-bold shadow-sm text-black border border-black/20 transition-colors hover:bg-white"
+                            className="inline-flex items-center gap-1 bg-white/80 px-2 py-0.5 text-[11px] shadow-sm text-black border border-black/20 transition-colors hover:bg-white"
                             title={isInteractive ? 'Click to toggle encryption' : 'Client-side Encrypted'}
                             onClick={isInteractive ? onToggleEncrypt : undefined}
                             role={isInteractive ? 'button' : undefined}
@@ -91,7 +114,7 @@ export default function StickyNote({
             </div>
 
             {/* Note Content Body */}
-            <p className="relative z-10 mt-3 text-lg leading-snug font-bold text-black/95 line-clamp-5 font-handwriting flex-1">
+            <p className="relative z-10 mt-3 text-lg leading-normal text-black/80 line-clamp-5 font-handwriting flex-1">
                 {content}
             </p>
 
@@ -115,7 +138,7 @@ export default function StickyNote({
                     )}
                 </div>
 
-                {/* Interactive Mode Action Buttons */}
+                {/* Workspace Action Buttons (shown only on card hover) */}
                 {isInteractive && (
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         {onEdit && (

@@ -1,30 +1,51 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff, User, Sparkles } from 'lucide-react';
-import StickyNote from './StickyNote';
+import StickyNote from '../components/StickyNote';
 
+/**
+ * SignIn Component
+ * 
+ * Renders the user authentication portal (overlay view).
+ * Supports toggling between standard Sign-In and Account Registration modes.
+ * Displays interactive background floating sticky notes conveying security & privacy info.
+ * 
+ * @param {object} props
+ * @param {function} props.onBack - Callback triggered when the user clicks the back navigation button.
+ */
 export default function SignIn({ onBack }) {
+    // Mode switcher state: true means Registration, false means Login
     const [isRegister, setIsRegister] = useState(false);
+    
+    // Password visibility toggle state
     const [showPassword, setShowPassword] = useState(false);
+    
+    // Auth input data fields
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
     });
 
+    /**
+     * Input fields state synchronizer
+     */
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    /**
+     * Form submit handler
+     */
     const handleSubmit = (e) => {
         e.preventDefault();
-        // UI only, functionality is omitted as requested
+        // UI design verification only. Logic/Backend calls omitted as requested.
     };
 
     return (
         <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-50/40 via-white to-zinc-100/40 px-6 py-12">
 
-            {/* Background Decorative Element 1: Floating Amber Note */}
+            {/* Background Decorative Element 1: Floating Amber Note (Left Column) */}
             <div className="pointer-events-none absolute -left-12 top-1/4 hidden rotate-[-8deg] opacity-70 md:block lg:left-12 xl:left-24">
                 <div className="w-60 shadow-xl transition-all duration-500 hover:rotate-[-4deg] hover:scale-105 pointer-events-auto">
                     <StickyNote
@@ -37,7 +58,7 @@ export default function SignIn({ onBack }) {
                 </div>
             </div>
 
-            {/* Background Decorative Element 2: Floating Cyan Note */}
+            {/* Background Decorative Element 2: Floating Cyan Note (Right Column) */}
             <div className="pointer-events-none absolute -right-12 bottom-1/4 hidden rotate-[6deg] opacity-70 md:block lg:right-12 xl:right-24">
                 <div className="w-60 shadow-xl transition-all duration-500 hover:rotate-[2deg] hover:scale-105 pointer-events-auto">
                     <StickyNote
@@ -50,7 +71,7 @@ export default function SignIn({ onBack }) {
                 </div>
             </div>
 
-            {/* Back Button */}
+            {/* Back Navigation Button */}
             <div className="absolute top-6 left-6 z-20">
                 <button
                     type="button"
@@ -62,16 +83,15 @@ export default function SignIn({ onBack }) {
                 </button>
             </div>
 
-            {/* Center Auth Card Wrapper */}
+            {/* Center Authentication Card Container */}
             <div className="relative z-10 w-full max-w-[440px]">
 
-                {/* Visual Top Glow */}
+                {/* Top glow ambient effect shadow */}
                 <div className="absolute -top-10 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl"></div>
 
-                {/* Card Container */}
                 <div className="w-full rounded-3xl border border-zinc-200/80 bg-white/80 p-8 shadow-2xl backdrop-blur-xl">
 
-                    {/* Header: Brand & Title */}
+                    {/* Header Branding */}
                     <div className="flex flex-col items-center text-center">
                         <div className="flex items-center gap-2 mb-4">
                             <img
@@ -79,10 +99,10 @@ export default function SignIn({ onBack }) {
                                 alt="Visionate Logo"
                                 className="h-10 w-auto object-contain"
                             />
-                            <span className="text-xl font-bold tracking-tight text-zinc-900">Visionate</span>
+                            <span className="text-xl tracking-tight text-zinc-900">Visionate</span>
                         </div>
 
-                        <h2 className="text-2xl font-extrabold tracking-tight text-zinc-900">
+                        <h2 className="text-2xl tracking-tight text-zinc-900">
                             {isRegister ? 'Create an account' : 'Welcome back'}
                         </h2>
                         <p className="mt-2 text-sm text-zinc-500">
@@ -92,10 +112,10 @@ export default function SignIn({ onBack }) {
                         </p>
                     </div>
 
-                    {/* Form */}
+                    {/* Form Controls */}
                     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
 
-                        {/* Name Field (only shown on Registration) */}
+                        {/* Full Name Field (Only shown during Account Registration) */}
                         {isRegister && (
                             <div>
                                 <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2">
@@ -164,6 +184,7 @@ export default function SignIn({ onBack }) {
                                     className="block w-full rounded-xl border border-zinc-200 bg-white/50 py-2.5 pl-10 pr-10 text-sm text-zinc-900 placeholder-zinc-400 outline-none transition duration-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/10"
                                     required
                                 />
+                                {/* Show/Hide password toggler button */}
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
@@ -178,7 +199,7 @@ export default function SignIn({ onBack }) {
                             </div>
                         </div>
 
-                        {/* Terms and Conditions checkbox for register */}
+                        {/* Terms and Conditions checkbox (Only shown during Account Registration) */}
                         {isRegister && (
                             <div className="flex items-start gap-2">
                                 <input
@@ -209,7 +230,7 @@ export default function SignIn({ onBack }) {
                         </button>
                     </form>
 
-                    {/* Mode Toggle footer */}
+                    {/* Mode Toggle Footer Button link */}
                     <div className="mt-8 pt-6 border-t border-zinc-100 text-center">
                         <p className="text-sm text-zinc-500">
                             {isRegister ? 'Already have an account?' : "Don't have an account yet?"}{' '}

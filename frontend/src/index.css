@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pacifico&display=swap');
+
 
 /* ==========================================================================
    1. TAILWIND CSS FRAMEWORK IMPORT
@@ -9,9 +10,10 @@
    2. ROOT DESIGN TOKENS & SYSTEM THEME
    ========================================================================== */
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Pacifico', cursive;
   --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Consolas, monospace;
-  --font-handwriting: 'Caveat', cursive;
+  --font-handwriting: 'Pacifico', cursive;
+
   color-scheme: light;
 }
 
