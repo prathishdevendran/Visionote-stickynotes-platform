@@ -9,6 +9,20 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.auth import router as auth_router
 from app.routes.notes import router as notes_router
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load environment variables
+load_dotenv()
+if not os.getenv("ALLOWED_ORIGINS"):
+    app_env = Path(__file__).parent / ".env"
+    if app_env.exists():
+        load_dotenv(dotenv_path=app_env)
+
+# Parse allowed CORS origins
+origins_str = os.getenv("ALLOWED_ORIGINS", "*")
+origins = [origin.strip() for origin in origins_str.split(",") if origin.strip()]
 
 # Initialize the core FastAPI app
 app = FastAPI(
@@ -21,7 +35,7 @@ app = FastAPI(
 # a separate port/origin) to successfully issue HTTP requests to this backend.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permits all origins for ease of development. Limit this in production.
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],  # Allows GET, POST, PUT, DELETE, OPTIONS, etc.
     allow_headers=["*"],  # Allows all headers (e.g., Content-Type, Authorization)
