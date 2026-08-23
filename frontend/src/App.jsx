@@ -58,7 +58,7 @@ function LandingPage({ isSignIn, landingStyle, navigate }) {
 export default function App() {
     const location = useLocation();
     const navigate = useNavigate();
-    
+
     // appRef allows directly writing CSS Custom Properties to the DOM,
     // avoiding React re-renders on scroll which would otherwise lag note layouts.
     const appRef = useRef(null);
@@ -88,7 +88,7 @@ export default function App() {
 
             const totalHeight = window.innerHeight || 800;
             const currentScroll = window.scrollY;
-            
+
             // Map scroll scrollY coordinate to progress factor [0, 1] over 1 full screen height
             const progress = Math.min(1, Math.max(0, currentScroll / totalHeight));
 
@@ -131,6 +131,23 @@ export default function App() {
 
         return () => window.removeEventListener('scroll', handleScroll);
     }, [isLandingRoute]);
+
+    // Scale manual wheel scrolling speed by 0.8 on the landing page
+    useEffect(() => {
+        if (!isLandingRoute || location.pathname !== '/') return;
+
+        const handleWheel = (e) => {
+            if (e.ctrlKey) return;
+            e.preventDefault();
+            window.scrollBy(e.deltaX * 0.8, e.deltaY * 0.4);
+        };
+
+        window.addEventListener('wheel', handleWheel, { passive: false });
+
+        return () => {
+            window.removeEventListener('wheel', handleWheel);
+        };
+    }, [isLandingRoute, location.pathname]);
 
     // Static landing styles using CSS Custom Property variables with native white fallbacks
     const landingStyle = {

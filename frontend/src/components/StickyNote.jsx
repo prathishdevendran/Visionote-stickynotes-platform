@@ -45,8 +45,7 @@ export default function StickyNote({
     content = '',
     color = 'amber',
     tags = [],
-    isPinned = true,
-    isEncrypted = false,
+    isPinned = false,
     updatedAt = '',
     mode = 'display',
     onEdit,
@@ -85,18 +84,6 @@ export default function StickyNote({
 
                 {/* Status Badges & Pin */}
                 <div className="flex items-center gap-1.5 shrink-0">
-                    {isEncrypted && (
-                        <span
-                            className="inline-flex items-center gap-1 bg-white/80 px-2 py-0.5 text-[11px] shadow-sm text-black border border-black/20 transition-colors hover:bg-white"
-                            title={isInteractive ? 'Click to toggle encryption' : 'Client-side Encrypted'}
-                            onClick={isInteractive ? onToggleEncrypt : undefined}
-                            role={isInteractive ? 'button' : undefined}
-                            style={{ cursor: isInteractive ? 'pointer' : 'default' }}
-                        >
-                            <Lock className="h-3 w-3 text-black" />
-                            <span>Encrypted</span>
-                        </span>
-                    )}
 
                     {isPinned && (
                         <button

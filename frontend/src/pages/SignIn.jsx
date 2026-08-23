@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff, User, Sparkles } from 'lucide-react';
 import StickyNote from '../components/StickyNote';
+import { signup, signin } from '../services/api';
 
 /**
  * SignIn Component
@@ -13,6 +15,8 @@ import StickyNote from '../components/StickyNote';
  * @param {function} props.onBack - Callback triggered when the user clicks the back navigation button.
  */
 export default function SignIn({ onBack }) {
+    const navigate = useNavigate();
+
     // Mode switcher state: true means Registration, false means Login
     const [isRegister, setIsRegister] = useState(false);
     
@@ -26,6 +30,9 @@ export default function SignIn({ onBack }) {
         password: '',
     });
 
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     /**
      * Input fields state synchronizer
      */
@@ -37,9 +44,27 @@ export default function SignIn({ onBack }) {
     /**
      * Form submit handler
      */
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // UI design verification only. Logic/Backend calls omitted as requested.
+        setError(null);
+        setLoading(true);
+
+        try {
+            if (isRegister) {
+                await signup(formData.name, formData.email, formData.password);
+                setIsRegister(false);
+                setFormData({ name: '', email: formData.email, password: '' });
+                setError("Account created successfully! Please sign in.");
+            } else {
+                const data = await signin(formData.email, formData.password);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                navigate('/workspace');
+            }
+        } catch (err) {
+            setError(err.message || 'An error occurred during authentication.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -114,6 +139,11 @@ export default function SignIn({ onBack }) {
 
                     {/* Form Controls */}
                     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                        {error && (
+                            <div className={`rounded-xl p-3 text-xs border ${error.includes("successfully") ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-red-50 text-red-600 border-red-200"}`}>
+                                {error}
+                            </div>
+                        )}
 
                         {/* Full Name Field (Only shown during Account Registration) */}
                         {isRegister && (
@@ -217,9 +247,12 @@ export default function SignIn({ onBack }) {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/10 transition-all duration-300 hover:bg-indigo-500 hover:shadow-indigo-600/20 active:scale-[0.98] cursor-pointer"
+                            disabled={loading}
+                            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/10 transition-all duration-300 hover:bg-indigo-500 hover:shadow-indigo-600/20 active:scale-[0.98] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isRegister ? (
+                            {loading ? (
+                                <span>Processing...</span>
+                            ) : isRegister ? (
                                 <>
                                     <Sparkles className="h-4 w-4 transition duration-300 group-hover:rotate-12" />
                                     <span>Create Account</span>

@@ -316,7 +316,6 @@ export default function SubHero({ onExplore }) {
                                         content={note.content}
                                         color={note.color}
                                         tags={note.tags}
-                                        isEncrypted={note.isEncrypted}
                                         isPinned={false}
                                     />
                                 </div>
