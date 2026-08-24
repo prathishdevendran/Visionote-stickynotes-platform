@@ -1,6 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+const rawApiUrl = import.meta.env.VITE_API_URL;
+const BASE_URL = rawApiUrl ? rawApiUrl.replace(/\/+$/, "") : "";
 
-if (!BASE_URL) {
+if (!rawApiUrl) {
     console.error(
         "CRITICAL: VITE_API_URL environment variable is not defined! " +
         "API calls will fall back to relative paths, which routes them to Vercel's static file server " +
