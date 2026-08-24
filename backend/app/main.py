@@ -22,7 +22,7 @@ if not os.getenv("ALLOWED_ORIGINS"):
 
 # Parse allowed CORS origins
 origins_str = os.getenv("ALLOWED_ORIGINS", "*")
-origins = [origin.strip() for origin in origins_str.split(",") if origin.strip()]
+origins = [origin.strip().rstrip("/") for origin in origins_str.split(",") if origin.strip()]
 
 # Initialize the core FastAPI app
 app = FastAPI(
