@@ -1,3 +1,6 @@
+PARTIALLY BUILT
+
+
 # Visionote Sticky Notes Platform
 
 Visionote is a modern sticky notes platform featuring a FastAPI backend powered by MongoDB and a React + Vite frontend styled with Tailwind CSS v4.
